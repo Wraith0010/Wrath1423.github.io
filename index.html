@@ -441,6 +441,37 @@ nav.stuck {
 }
 .vid-card:hover .vid-corner { opacity: 1; }
 
+/* LIVE GAME card variant */
+.vid-live-badge {
+  position: absolute; top: 0.75rem; right: 0.75rem;
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-body); font-size: 0.58rem;
+  letter-spacing: 0.15em; color: var(--red);
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,51,85,0.4); padding: 0.3rem 0.65rem;
+  text-transform: uppercase; font-weight: 700; z-index: 2;
+}
+.vid-live-badge .live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red); box-shadow: 0 0 10px var(--red);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+.vid-card--live .vid-tag { color: #ff8866; }
+.vid-card--live::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 60%, rgba(255,51,85,0.08));
+  pointer-events: none; z-index: 1;
+}
+.vid-card--live .play-ring { border-color: rgba(255,51,85,0.6); }
+.vid-card--live:hover .play-ring {
+  border-color: var(--red);
+  box-shadow: 0 0 30px rgba(255,51,85,0.5);
+}
+.vid-card--live .play-ring svg { fill: var(--red); }
+.vid-card--live .vid-corner {
+  border-color: transparent transparent var(--red) transparent;
+}
+
 /* ═══════════════════════════════════════════
    VIDEO MODAL
 ═══════════════════════════════════════════ */
@@ -774,7 +805,7 @@ footer {
       <p>I'm <strong>Wraith</strong> — a professional Roblox Luau engineer with a deep obsession for systems that <strong>feel exceptional</strong>. Every hitbox, every tween, every server call is deliberate.</p>
       <p>I've shipped <strong>65+ commissioned projects</strong> ranging from high-speed combat games to complex RPG economies — generating over <strong>300,000 Robux</strong> in revenue for my clients.</p>
       <p>My code is clean, <strong>well-documented</strong>, modular, and built to scale. I don't just write scripts — I architect experiences that players remember.</p>
-      <div class="tag-line">Discord: lostsource_</div>
+      <div class="tag-line">Discord: 6_wra_2_ith_3</div>
     </div>
     <div>
       <div class="section-label r d1">
@@ -864,11 +895,11 @@ footer {
       Ready to take your game to the next level? Send me a message on Discord — I respond fast, quote fairly, and deliver on time.
     </p>
     <div class="contact-cards r d3">
-      <a class="c-card" href="https://discord.com/users/lostsource_" target="_blank" rel="noopener">
+      <a class="c-card" href="https://discord.com/users/6_wra_2_ith_3" target="_blank" rel="noopener">
         <span class="c-ico">💬</span>
         <div>
           <span class="c-lbl">Discord</span>
-          <span class="c-val">lostsource_</span>
+          <span class="c-val">6_wra_2_ith_3</span>
         </div>
       </a>
       <div class="c-card">
@@ -896,7 +927,7 @@ footer {
 <!-- ════════ FOOTER ════════ -->
 <footer>
   <div class="footer-logo">WRAITH</div>
-  <div class="footer-copy">© 2025 Wraith · lostsource_ · All rights reserved</div>
+  <div class="footer-copy">© 2025 Wraith · 6_wra_2_ith_3 · All rights reserved</div>
 </footer>
 
 <!-- ════════════════════════════════════════
@@ -985,13 +1016,19 @@ const cntObs = new IntersectionObserver(entries => {
 }, { threshold: 0.5 });
 document.querySelectorAll('.counter').forEach(el => cntObs.observe(el));
 
-/* ── VIDEO DATA ── */
+/* ── VIDEO / GAME DATA ── */
 const VIDEOS = [
-  { id: 'qe4NCXlUm3c', tag: 'Movement System',  title: 'Advanced Dynamic Movement System' },
+  { id: 'qe4NCXlUm3c', tag: 'Movement System',   title: 'Advanced Dynamic Movement System' },
   { id: '4LspstIHfAQ', tag: 'Combat System',     title: 'Advanced Battlegrounds Combat System' },
-  { id: '1He8pOUybGg', tag: 'Bow & Arrow System',title: 'Bow & Arrow System' },
-  { id: 'vGCRKEhnDx4?si=hI6DHR2wF0UhjCh9', tag: 'DragSystem',     title: 'Drag and Drop System' },
-
+  { id: '1He8pOUybGg', tag: 'Bow & Arrow System', title: 'Bow & Arrow System' },
+  { id: 'vGCRKEhnDx4', tag: 'Drag System',       title: 'Drag and Drop System' },
+  {
+    external: true,
+    url: 'https://www.roblox.com/games/73967472138513/The-Backrooms-LOST-SOURCE',
+    thumb: 'https://www.roblox.com/asset-thumbnail/image?assetId=73967472138513&width=768&height=432&format=png',
+    tag: 'Live Game · PC Only',
+    title: 'The Backrooms — LOST SOURCE'
+  }
 ];
 
 /* ── VIDEO GRID BUILD ── */
@@ -999,36 +1036,48 @@ const grid = document.getElementById('vid-grid');
 VIDEOS.forEach((v, i) => {
   const d = ['d1','d2','d3','d4','d5','d6'][i % 6];
   const el = document.createElement('div');
-  el.className = `vid-card r ${d}`;
+  el.className = `vid-card r ${d}${v.external ? ' vid-card--live' : ''}`;
   el.dataset.idx = i;
+
+  const thumbSrc = v.external ? v.thumb : `https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
+  const playPath = v.external ? 'M10 17l5-5-5-5v10z' : 'M8 5v14l11-7z';
+  const liveBadge = v.external
+    ? '<div class="vid-live-badge"><span class="live-dot"></span>LIVE · PC ONLY</div>'
+    : '';
+
   el.innerHTML = `
     <div class="vid-thumb">
-      <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" alt="${v.title}" loading="lazy"/>
+      <img src="${thumbSrc}" alt="${v.title}" loading="lazy"/>
       <div class="vid-overlay">
         <div class="play-ring">
-          <svg width="14" height="14" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24"><path d="${playPath}"/></svg>
         </div>
       </div>
       <div class="vid-num">/ 0${i + 1}</div>
+      ${liveBadge}
     </div>
     <div class="vid-info">
       <div class="vid-tag">${v.tag}</div>
       <div class="vid-title">${v.title}</div>
     </div>
     <div class="vid-corner"></div>`;
-  el.addEventListener('click', () => openModal(i));
+
+  el.addEventListener('click', () => {
+    if (v.external) window.open(v.url, '_blank', 'noopener,noreferrer');
+    else openModal(i);
+  });
   grid.appendChild(el);
   revealObs.observe(el);
 });
 
 /* ── MODAL LOGIC ── */
-const modal    = document.getElementById('vid-modal');
-const iframe   = document.getElementById('modal-iframe');
-const modalTag = document.getElementById('modal-tag');
-const modalTitle = document.getElementById('modal-title');
+const modal       = document.getElementById('vid-modal');
+const iframe      = document.getElementById('modal-iframe');
+const modalTag    = document.getElementById('modal-tag');
+const modalTitle  = document.getElementById('modal-title');
 const modalCounter = document.getElementById('modal-counter');
-const btnPrev  = document.getElementById('modal-prev');
-const btnNext  = document.getElementById('modal-next');
+const btnPrev     = document.getElementById('modal-prev');
+const btnNext     = document.getElementById('modal-next');
 let currentIdx = 0;
 
 function openModal(idx) {
@@ -1041,32 +1090,36 @@ function openModal(idx) {
 function closeModal() {
   modal.classList.remove('open');
   document.body.style.overflow = '';
-  // Stop video by clearing src after transition
   setTimeout(() => { iframe.src = ''; }, 450);
 }
 
 function loadVideo(idx) {
   const v = VIDEOS[idx];
-  // autoplay=1, mute not forced so audio plays — browser autoplay policies apply
+  if (v.external) return; // safety guard — external entries never load in modal
   iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1`;
   modalTag.textContent = v.tag;
   modalTitle.textContent = v.title;
   modalCounter.textContent = `0${idx + 1} / ${VIDEOS.length < 10 ? '0' + VIDEOS.length : VIDEOS.length}`;
-  btnPrev.disabled = idx === 0;
-  btnNext.disabled = idx === VIDEOS.length - 1;
+  btnPrev.disabled = !VIDEOS.slice(0, idx).some(x => !x.external);
+  btnNext.disabled = !VIDEOS.slice(idx + 1).some(x => !x.external);
 }
+
+const findVideo = (from, dir) => {
+  let i = from + dir;
+  while (i >= 0 && i < VIDEOS.length && VIDEOS[i].external) i += dir;
+  return (i >= 0 && i < VIDEOS.length) ? i : -1;
+};
 
 document.getElementById('modal-close').addEventListener('click', closeModal);
 document.getElementById('modal-backdrop').addEventListener('click', closeModal);
-btnPrev.addEventListener('click', () => { if (currentIdx > 0) loadVideo(--currentIdx); });
-btnNext.addEventListener('click', () => { if (currentIdx < VIDEOS.length - 1) loadVideo(++currentIdx); });
+btnPrev.addEventListener('click', () => { const i = findVideo(currentIdx, -1); if (i !== -1) loadVideo(currentIdx = i); });
+btnNext.addEventListener('click', () => { const i = findVideo(currentIdx, +1); if (i !== -1) loadVideo(currentIdx = i); });
 
-// Keyboard support
 document.addEventListener('keydown', e => {
   if (!modal.classList.contains('open')) return;
   if (e.key === 'Escape') closeModal();
-  if (e.key === 'ArrowLeft'  && currentIdx > 0) loadVideo(--currentIdx);
-  if (e.key === 'ArrowRight' && currentIdx < VIDEOS.length - 1) loadVideo(++currentIdx);
+  if (e.key === 'ArrowLeft')  { const i = findVideo(currentIdx, -1); if (i !== -1) loadVideo(currentIdx = i); }
+  if (e.key === 'ArrowRight') { const i = findVideo(currentIdx, +1); if (i !== -1) loadVideo(currentIdx = i); }
 });
 
 /* ── MAGNETIC BUTTONS ── */
