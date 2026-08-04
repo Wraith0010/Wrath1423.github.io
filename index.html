@@ -131,7 +131,7 @@ nav.stuck {
   position: relative;
 }
 .nav-logo::after { content: '.'; color: var(--green); }
-.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links { display: flex; gap: 2.2rem; list-style: none; }
 .nav-links a {
   font-family: var(--font-ui);
   font-size: 0.8rem; letter-spacing: 0.2em;
@@ -248,7 +248,7 @@ nav.stuck {
 .hero-descriptor {
   font-family: var(--font-ui); font-size: clamp(1rem, 2.5vw, 1.35rem);
   letter-spacing: 0.05em; color: var(--muted2);
-  margin-top: 1.5rem; max-width: 560px; line-height: 1.6;
+  margin-top: 1.5rem; max-width: 620px; line-height: 1.6;
   opacity: 0; animation: fadeUp 0.9s 0.45s var(--ease-out-expo) forwards;
 }
 .hero-descriptor strong { color: var(--text); font-weight: 600; }
@@ -363,6 +363,8 @@ nav.stuck {
 .about-text { font-family: var(--font-ui); font-size: 1.05rem; color: var(--muted2); line-height: 1.9; }
 .about-text p { margin-bottom: 1.2rem; }
 .about-text strong { color: var(--text); font-weight: 600; }
+.about-text a { color: var(--green); text-decoration: none; border-bottom: 1px solid rgba(0,255,136,0.3); transition: border-color 0.2s; }
+.about-text a:hover { border-color: var(--green); }
 .about-text .tag-line {
   display: inline-block; margin-top: 0.5rem;
   font-family: var(--font-body); font-size: 0.72rem;
@@ -387,9 +389,68 @@ nav.stuck {
 .skill-tag { font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); }
 
 /* ═══════════════════════════════════════════
+   EXPERIENCE / TRUSTED BY
+═══════════════════════════════════════════ */
+#experience { background: var(--bg1); }
+.exp-sub {
+  font-family: var(--font-ui); font-size: 1.05rem; color: var(--muted2);
+  line-height: 1.8; max-width: 640px; margin: -2rem 0 3rem;
+}
+.exp-sub strong { color: var(--text); font-weight: 600; }
+.exp-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+}
+.exp-card {
+  background: var(--bg0); padding: 2.2rem 2rem;
+  position: relative; overflow: hidden;
+  text-decoration: none; color: inherit; display: block;
+  transition: background 0.35s;
+}
+.exp-card:hover { background: var(--bg2); }
+.exp-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--green);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.exp-card:hover::after { transform: scaleX(1); }
+.exp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; }
+.exp-type {
+  font-family: var(--font-body); font-size: 0.58rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--green);
+  border: 1px solid var(--border-lit); padding: 0.3rem 0.7rem;
+}
+.exp-ico { font-size: 1.5rem; opacity: 0.9; }
+.exp-name {
+  font-family: var(--font-display); font-size: 2rem;
+  letter-spacing: 0.05em; color: var(--text); line-height: 1; margin-bottom: 0.6rem;
+}
+.exp-role {
+  font-family: var(--font-body); font-size: 0.62rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.9rem;
+}
+.exp-desc { font-family: var(--font-ui); font-size: 0.88rem; color: var(--muted2); line-height: 1.75; }
+.exp-link {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-body); font-size: 0.6rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--green); margin-top: 1.2rem;
+  opacity: 0; transform: translateX(-6px);
+  transition: opacity 0.35s, transform 0.35s var(--ease-out-expo);
+}
+.exp-card:hover .exp-link { opacity: 1; transform: translateX(0); }
+.exp-static {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-body); font-size: 0.6rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); margin-top: 1.2rem;
+}
+
+/* ═══════════════════════════════════════════
    VIDEOS SECTION
 ═══════════════════════════════════════════ */
-#videos { background: var(--bg1); }
 .videos-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
   gap: 1px; background: var(--border); border: 1px solid var(--border);
@@ -406,6 +467,16 @@ nav.stuck {
   transition: filter 0.5s, transform 0.5s var(--ease-out-expo);
 }
 .vid-card:hover .vid-thumb img { filter: brightness(0.8) saturate(1.1); transform: scale(1); }
+.vid-thumb.thumb-fail { background: linear-gradient(135deg, #0d1020 0%, #03040a 70%); }
+.vid-thumb.thumb-fail img { display: none; }
+.vid-fallback {
+  position: absolute; inset: 0; display: none;
+  align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 2.2rem;
+  letter-spacing: 0.12em; color: rgba(255,255,255,0.09);
+  text-align: center; padding: 0 2rem;
+}
+.vid-thumb.thumb-fail .vid-fallback { display: flex; }
 .vid-overlay {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
@@ -429,6 +500,7 @@ nav.stuck {
   letter-spacing: 0.15em; color: var(--green);
   background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
   border: 1px solid var(--border-lit); padding: 0.25rem 0.6rem;
+  z-index: 2;
 }
 .vid-info { padding: 1rem 1.1rem 1.25rem; }
 .vid-tag { font-family: var(--font-body); font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green); margin-bottom: 0.4rem; }
@@ -650,6 +722,9 @@ footer {
 /* ═══════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .nav-links { gap: 1.5rem; }
+}
 @media (max-width: 768px) {
   nav { padding: 1.2rem 1.5rem; }
   .nav-links { display: none; }
@@ -658,6 +733,7 @@ footer {
   .stat-block { border-right: none; border-bottom: 1px solid var(--border); }
   #about .section-inner { grid-template-columns: 1fr; gap: 3rem; }
   .section-inner { padding: 5rem 1.5rem; }
+  .exp-sub { margin-top: -1.5rem; }
   footer { flex-direction: column; gap: 0.75rem; padding: 1.5rem; }
   .modal-inner { width: 95vw; }
   .modal-title { font-size: 0.75rem; }
@@ -694,7 +770,7 @@ footer {
       ></iframe>
     </div>
     <div class="modal-footer">
-      <span class="modal-counter" id="modal-counter">01 / 10</span>
+      <span class="modal-counter" id="modal-counter">01 / 06</span>
       <div class="modal-nav">
         <button class="modal-btn" id="modal-prev">← Prev</button>
         <button class="modal-btn" id="modal-next">Next →</button>
@@ -708,6 +784,7 @@ footer {
   <a class="nav-logo" href="#hero">WRAITH</a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
     <li><a href="#videos">Work</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -732,8 +809,9 @@ footer {
   </h1>
   <p class="hero-descriptor">
     Elite <strong>Lua/Luau engineer</strong> crafting combat systems, UI frameworks &amp;
-    advanced server architecture. <strong>65+ commissions</strong> delivered.
-    <strong>300K+ Robux</strong> in client revenue.
+    advanced server architecture. <strong>65+ commissions</strong> delivered,
+    <strong>400K+ Robux</strong> in client revenue — and shipped work inside
+    <strong>popular live games &amp; communities</strong>.
   </p>
   <div class="hero-ctas">
     <a class="cta-primary" href="#videos">View Showcase</a>
@@ -745,11 +823,11 @@ footer {
       <div class="stat-lbl">Commissions Done</div>
     </div>
     <div class="stat-block">
-      <div class="stat-val"><span class="counter" data-target="300">0</span><span class="accent">K+ ⟁</span></div>
+      <div class="stat-val"><span class="counter" data-target="400">0</span><span class="accent">K+ ⟁</span></div>
       <div class="stat-lbl">Robux Revenue</div>
     </div>
     <div class="stat-block">
-      <div class="stat-val"><span class="counter" data-target="4">0</span></div>
+      <div class="stat-val"><span class="counter" data-target="6">0</span></div>
       <div class="stat-lbl">Showcase Projects</div>
     </div>
     <div class="stat-block">
@@ -803,7 +881,8 @@ footer {
     </div>
     <div class="about-text r d2">
       <p>I'm <strong>Wraith</strong> — a professional Roblox Luau engineer with a deep obsession for systems that <strong>feel exceptional</strong>. Every hitbox, every tween, every server call is deliberate.</p>
-      <p>I've shipped <strong>65+ commissioned projects</strong> ranging from high-speed combat games to complex RPG economies — generating over <strong>300,000 Robux</strong> in revenue for my clients.</p>
+      <p>I've shipped <strong>65+ commissioned projects</strong> ranging from high-speed combat games to complex RPG economies — generating over <strong>400,000 Robux</strong> in revenue for my clients.</p>
+      <p>I've also worked inside <strong>popular live games and communities</strong> — including <strong>The Armory</strong> and the <a href="https://www.roblox.com/communities/34486396/Anti-Boredom" target="_blank" rel="noopener">Anti-Boredom</a> community — building systems for real, active playerbases.</p>
       <p>My code is clean, <strong>well-documented</strong>, modular, and built to scale. I don't just write scripts — I architect experiences that players remember.</p>
       <div class="tag-line">Discord: 6_wra_2_ith_3</div>
     </div>
@@ -827,12 +906,57 @@ footer {
   </div>
 </section>
 
+<!-- ════════ EXPERIENCE / TRUSTED BY ════════ -->
+<section id="experience" class="section">
+  <div class="section-inner">
+    <div class="r">
+      <div class="section-label">
+        <span class="section-num">03 / Experience</span>
+        <span class="section-rule"></span>
+      </div>
+      <h2 class="section-title">Trusted <span class="hl">By</span></h2>
+    </div>
+    <p class="exp-sub r d1">
+      Outside of solo commissions, I've worked on <strong>popular games and communities</strong> —
+      contributing systems to titles and groups with real, active playerbases.
+    </p>
+    <div class="exp-grid">
+      <div class="exp-card r d2">
+        <div class="exp-head">
+          <span class="exp-type">Game</span>
+          <span class="exp-ico">🔫</span>
+        </div>
+        <div class="exp-name">The Armory</div>
+        <div class="exp-role">Scripter · Systems Work</div>
+        <div class="exp-desc">
+          Contributed scripting work to a popular live Roblox title — building and refining
+          gameplay systems used by an active playerbase in production.
+        </div>
+        <span class="exp-static">Popular Roblox Title</span>
+      </div>
+      <a class="exp-card r d3" href="https://www.roblox.com/communities/34486396/Anti-Boredom" target="_blank" rel="noopener">
+        <div class="exp-head">
+          <span class="exp-type">Community</span>
+          <span class="exp-ico">👥</span>
+        </div>
+        <div class="exp-name">Anti-Boredom</div>
+        <div class="exp-role">Scripter · Community Projects</div>
+        <div class="exp-desc">
+          Worked with an established Roblox community, delivering scripted features and
+          systems for their projects and live experiences.
+        </div>
+        <span class="exp-link">Visit Community →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- ════════ VIDEOS ════════ -->
 <section id="videos" class="section">
   <div class="section-inner" style="padding-bottom:2rem">
     <div class="r">
       <div class="section-label">
-        <span class="section-num">03 / Showcase</span>
+        <span class="section-num">04 / Showcase</span>
         <span class="section-rule"></span>
       </div>
       <h2 class="section-title">My <span class="hl">Work</span></h2>
@@ -846,7 +970,7 @@ footer {
   <div class="section-inner">
     <div class="r">
       <div class="section-label">
-        <span class="section-num">04 / Process</span>
+        <span class="section-num">05 / Process</span>
         <span class="section-rule"></span>
       </div>
       <h2 class="section-title">How I <span class="hl">Work</span></h2>
@@ -886,7 +1010,7 @@ footer {
   <div class="section-inner">
     <div class="r">
       <div class="section-label">
-        <span class="section-num">05 / Contact</span>
+        <span class="section-num">06 / Contact</span>
         <span class="section-rule"></span>
       </div>
       <h2 class="section-title">Let's <span class="hl">Build</span></h2>
@@ -906,7 +1030,7 @@ footer {
         <span class="c-ico">📊</span>
         <div>
           <span class="c-lbl">Revenue Generated</span>
-          <span class="c-val">300,000+ Robux</span>
+          <span class="c-val">400,000+ Robux</span>
         </div>
       </div>
       <div class="c-card">
@@ -947,10 +1071,11 @@ document.addEventListener('mousemove', e => {
   ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
   requestAnimationFrame(animRing);
 })();
-document.querySelectorAll('a, button, .vid-card, .c-card, .skill-row, .process-card, .stat-block').forEach(el => {
+function bindHover(el) {
   el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
   el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-});
+}
+document.querySelectorAll('a, button, .vid-card, .c-card, .skill-row, .process-card, .stat-block, .exp-card').forEach(bindHover);
 
 /* ── MATRIX RAIN ── */
 (function() {
@@ -1018,18 +1143,29 @@ document.querySelectorAll('.counter').forEach(el => cntObs.observe(el));
 
 /* ── VIDEO / GAME DATA ── */
 const VIDEOS = [
-  { id: 'qe4NCXlUm3c', tag: 'Movement System',   title: 'Advanced Dynamic Movement System' },
-  { id: '4LspstIHfAQ', tag: 'Combat System',     title: 'Advanced Battlegrounds Combat System' },
-  { id: '1He8pOUybGg', tag: 'Bow & Arrow System', title: 'Bow & Arrow System' },
-  { id: 'vGCRKEhnDx4', tag: 'Drag System',       title: 'Drag and Drop System' },
+  { id: 'bx7GJ5NdkXM', tag: 'Movement System',    title: 'Advanced Dynamic Movement System' },
+  { id: '2LKIZJWBM14', tag: 'Combat System',      title: 'Advanced Battlegrounds Combat System' },
+  { id: '3Be1b9p573A', tag: 'Bow & Arrow System', title: 'Bow & Arrow System' },
+  { id: 'kYAE457BjvA', tag: 'Drag System',        title: 'Drag and Drop System' },
   {
     external: true,
-    url: 'https://www.roblox.com/games/73967472138513/The-Backrooms-LOST-SOURCE',
-    thumb: 'https://www.roblox.com/asset-thumbnail/image?assetId=73967472138513&width=768&height=432&format=png',
-    tag: 'Live Game · PC Only',
-    title: 'The Backrooms — LOST SOURCE'
+    url: 'https://www.roblox.com/games/120686885017982/1-Jump-Squishy-Slime-Crush',
+    thumb: 'https://tr.rbxcdn.com/180DAY-0009b4e48f8f6b99fd666e65bfb46665/768/432/Image/Png/noFilter',
+    badge: 'Live · Play Now',
+    tag: 'Live Game · Simulator',
+    title: '+1 Jump Squishy Slime Crush'
+  },
+  {
+    external: true,
+    url: 'https://www.roblox.com/games/114693591816941/Lucky-Brainrot-RNG',
+    thumb: 'https://tr.rbxcdn.com/180DAY-4df782fc1a495ffc4a2221ac21cfa1d9/768/432/Image/Png/noFilter',
+    badge: 'Live · Play Now',
+    tag: 'Live Game · RNG / Gacha',
+    title: 'Lucky Brainrot RNG'
   }
 ];
+
+const pad = n => String(n).padStart(2, '0');
 
 /* ── VIDEO GRID BUILD ── */
 const grid = document.getElementById('vid-grid');
@@ -1042,18 +1178,19 @@ VIDEOS.forEach((v, i) => {
   const thumbSrc = v.external ? v.thumb : `https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
   const playPath = v.external ? 'M10 17l5-5-5-5v10z' : 'M8 5v14l11-7z';
   const liveBadge = v.external
-    ? '<div class="vid-live-badge"><span class="live-dot"></span>LIVE · PC ONLY</div>'
+    ? `<div class="vid-live-badge"><span class="live-dot"></span>${v.badge || 'Live'}</div>`
     : '';
 
   el.innerHTML = `
     <div class="vid-thumb">
       <img src="${thumbSrc}" alt="${v.title}" loading="lazy"/>
+      <div class="vid-fallback">${v.title}</div>
       <div class="vid-overlay">
         <div class="play-ring">
           <svg width="14" height="14" viewBox="0 0 24 24"><path d="${playPath}"/></svg>
         </div>
       </div>
-      <div class="vid-num">/ 0${i + 1}</div>
+      <div class="vid-num">/ ${pad(i + 1)}</div>
       ${liveBadge}
     </div>
     <div class="vid-info">
@@ -1062,11 +1199,15 @@ VIDEOS.forEach((v, i) => {
     </div>
     <div class="vid-corner"></div>`;
 
+  const img = el.querySelector('.vid-thumb img');
+  img.addEventListener('error', () => el.querySelector('.vid-thumb').classList.add('thumb-fail'));
+
   el.addEventListener('click', () => {
     if (v.external) window.open(v.url, '_blank', 'noopener,noreferrer');
     else openModal(i);
   });
   grid.appendChild(el);
+  bindHover(el);
   revealObs.observe(el);
 });
 
@@ -1099,7 +1240,7 @@ function loadVideo(idx) {
   iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1`;
   modalTag.textContent = v.tag;
   modalTitle.textContent = v.title;
-  modalCounter.textContent = `0${idx + 1} / ${VIDEOS.length < 10 ? '0' + VIDEOS.length : VIDEOS.length}`;
+  modalCounter.textContent = `${pad(idx + 1)} / ${pad(VIDEOS.length)}`;
   btnPrev.disabled = !VIDEOS.slice(0, idx).some(x => !x.external);
   btnNext.disabled = !VIDEOS.slice(idx + 1).some(x => !x.external);
 }
