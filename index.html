@@ -314,6 +314,29 @@ nav.stuck {
   0%, 100% { opacity: 0.3; transform: translateX(0); }
   50% { opacity: 1; transform: translateX(4px); }
 }
+.hero-avatar {
+  position: absolute; z-index: 1; right: 5vw; top: 8.5rem;
+  width: min(34vw, 500px); height: min(calc(100vh - 11rem), 740px);
+  display: flex; flex-direction: column; align-items: center;
+  opacity: 0; animation: avatar-in 1.4s 0.5s ease forwards;
+}
+.hero-avatar::before {
+  content: ''; position: absolute; left: 10%; right: 10%; top: 8%; bottom: 14%;
+  background: radial-gradient(ellipse at 50% 40%, rgba(0,255,136,0.08) 0%, rgba(0,170,255,0.04) 40%, transparent 70%);
+  pointer-events: none;
+}
+#avatar-canvas { position: relative; width: 100%; flex: 1; min-height: 0; display: block; touch-action: pan-y; }
+.avatar-tag {
+  position: relative; display: inline-flex; align-items: center; gap: 0.7rem;
+  font-family: var(--font-body); font-size: 0.64rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted2);
+  text-decoration: none; border: 1px solid var(--border);
+  background: rgba(3,4,10,0.6); padding: 0.5rem 1rem;
+  transition: border-color 0.3s, color 0.3s;
+}
+.avatar-tag:hover { border-color: var(--border-lit); color: var(--text); }
+.avatar-tag b { color: var(--green); font-weight: 500; }
+@keyframes avatar-in { from { opacity: 0; } to { opacity: 1; } }
 
 /* ═══════════════════════════════════════════
    TICKER STRIP
@@ -447,6 +470,71 @@ nav.stuck {
   letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--muted); margin-top: 1.2rem;
 }
+
+/* ═══════════════════════════════════════════
+   CONTRIBUTOR IN
+═══════════════════════════════════════════ */
+.contrib-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+}
+.contrib-card {
+  background: var(--bg0); position: relative; overflow: hidden;
+  text-decoration: none; color: inherit; display: flex; flex-direction: column;
+  transition: background 0.35s;
+}
+.contrib-card:hover { background: var(--bg2); }
+.contrib-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--green);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.contrib-card:hover::after { transform: scaleX(1); }
+.contrib-thumb { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #060812; }
+.contrib-thumb img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: brightness(0.7) saturate(0.85); transform: scale(1.04);
+  transition: filter 0.5s, transform 0.6s var(--ease-out-expo);
+}
+.contrib-card:hover .contrib-thumb img { filter: brightness(0.95) saturate(1.05); transform: scale(1); }
+.contrib-thumb::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(3,4,10,0.85) 0%, transparent 55%);
+}
+.contrib-genre {
+  position: absolute; top: 0.75rem; left: 0.75rem; z-index: 2;
+  font-family: var(--font-body); font-size: 0.58rem;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--green);
+  background: rgba(0,0,0,0.65); border: 1px solid var(--border-lit); padding: 0.25rem 0.6rem;
+}
+.contrib-studio {
+  position: absolute; left: 1.1rem; bottom: 0.8rem; z-index: 2;
+  font-family: var(--font-body); font-size: 0.6rem;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted2);
+}
+.contrib-body { padding: 1.3rem 1.3rem 1.5rem; display: flex; flex-direction: column; flex: 1; }
+.contrib-name {
+  font-family: var(--font-display); font-size: 1.9rem;
+  letter-spacing: 0.05em; color: var(--text); line-height: 1; margin-bottom: 0.5rem;
+}
+.contrib-role {
+  font-family: var(--font-body); font-size: 0.62rem;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.2rem;
+}
+.contrib-stats { display: flex; border: 1px solid var(--border); margin-top: auto; }
+.contrib-stat { flex: 1; padding: 0.7rem 0.9rem; border-right: 1px solid var(--border); }
+.contrib-stat:last-child { border-right: none; }
+.cs-val { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0.05em; color: var(--text); line-height: 1; }
+.cs-val span { color: var(--green); }
+.cs-lbl { font-family: var(--font-body); font-size: 0.56rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
+.contrib-link {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-body); font-size: 0.6rem;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted2);
+  margin-top: 1.1rem; transition: color 0.3s, transform 0.35s var(--ease-out-expo);
+}
+.contrib-card:hover .contrib-link { color: var(--green); transform: translateX(4px); }
 
 /* ═══════════════════════════════════════════
    VIDEOS SECTION
@@ -722,11 +810,19 @@ footer {
 /* ═══════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════ */
+@media (max-width: 1280px) {
+  .hero-avatar { right: 2vw; width: 32vw; }
+}
 @media (max-width: 1024px) {
   .nav-links { gap: 1.5rem; }
+  .hero-avatar {
+    position: relative; order: -1; right: auto; top: auto;
+    width: 100%; height: 440px; margin: -3rem 0 2rem;
+  }
 }
 @media (max-width: 768px) {
   nav { padding: 1.2rem 1.5rem; }
+  .hero-avatar { height: 360px; margin: -2.5rem 0 1.5rem; }
   .nav-links { display: none; }
   #hero { padding: 8rem 1.5rem 4rem; }
   .hero-stats { flex-direction: column; gap: 0; }
@@ -785,6 +881,7 @@ footer {
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#experience">Experience</a></li>
+    <li><a href="#contributor">Contributor In</a></li>
     <li><a href="#videos">Work</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -797,6 +894,10 @@ footer {
   <div class="hero-glow-a"></div>
   <div class="hero-glow-b"></div>
   <div class="hero-lines"></div>
+  <div class="hero-avatar" id="hero-avatar">
+    <canvas id="avatar-canvas" aria-label="meanliest Roblox avatar"></canvas>
+    <a class="avatar-tag" href="https://www.roblox.com/users/1117724500/profile" target="_blank" rel="noopener">Roblox <b>@meanliest</b></a>
+  </div>
   <div class="hero-status">
     <span class="status-dot"></span>
     Available for commissions
@@ -823,7 +924,7 @@ footer {
       <div class="stat-lbl">Commissions Done</div>
     </div>
     <div class="stat-block">
-      <div class="stat-val"><span class="counter" data-target="400">0</span><span class="accent">K+ ⟁</span></div>
+      <div class="stat-val"><span class="counter" data-target="1.2" data-dec="1">0</span><span class="accent">M+ ⟁</span></div>
       <div class="stat-lbl">Robux Revenue</div>
     </div>
     <div class="stat-block">
@@ -951,12 +1052,79 @@ footer {
   </div>
 </section>
 
+<!-- ════════ CONTRIBUTOR IN ════════ -->
+<section id="contributor" class="section">
+  <div class="section-inner">
+    <div class="r">
+      <div class="section-label">
+        <span class="section-num">04 / Contributor In</span>
+        <span class="section-rule"></span>
+      </div>
+      <h2 class="section-title">Contributor <span class="hl">In</span></h2>
+    </div>
+    <p class="exp-sub r d1">
+      Live Roblox games I've written code for alongside their teams —
+      <strong>58M+ combined visits</strong> and counting.
+    </p>
+    <div class="contrib-grid">
+      <a class="contrib-card r d2" href="https://www.roblox.com/games/83264774625004/1-Jump-Crunchy-ASMR-Escape" target="_blank" rel="noopener">
+        <div class="contrib-thumb">
+          <img src="assets/games/crunchy-asmr-escape.jpg" alt="+1 Jump Crunchy ASMR Escape" loading="lazy"/>
+          <span class="contrib-genre">Simulator</span>
+          <span class="contrib-studio">Sky High Sims</span>
+        </div>
+        <div class="contrib-body">
+          <div class="contrib-name">+1 Jump Crunchy ASMR Escape</div>
+          <div class="contrib-role">Scripter · Live Game</div>
+          <div class="contrib-stats">
+            <div class="contrib-stat"><div class="cs-val">45M<span>+</span></div><div class="cs-lbl">Visits</div></div>
+            <div class="contrib-stat"><div class="cs-val">89K<span>+</span></div><div class="cs-lbl">Favorites</div></div>
+          </div>
+          <span class="contrib-link">Play on Roblox →</span>
+        </div>
+      </a>
+      <a class="contrib-card r d3" href="https://www.roblox.com/games/18159451435/MEGA-Boss-Survival" target="_blank" rel="noopener">
+        <div class="contrib-thumb">
+          <img src="assets/games/mega-boss-survival.jpg" alt="MEGA Boss Survival" loading="lazy"/>
+          <span class="contrib-genre">Boss Fighting</span>
+          <span class="contrib-studio">Anti Boredom</span>
+        </div>
+        <div class="contrib-body">
+          <div class="contrib-name">MEGA Boss Survival</div>
+          <div class="contrib-role">Scripter · Live Game</div>
+          <div class="contrib-stats">
+            <div class="contrib-stat"><div class="cs-val">12M<span>+</span></div><div class="cs-lbl">Visits</div></div>
+            <div class="contrib-stat"><div class="cs-val">26K<span>+</span></div><div class="cs-lbl">Favorites</div></div>
+          </div>
+          <span class="contrib-link">Play on Roblox →</span>
+        </div>
+      </a>
+      <a class="contrib-card r d4" href="https://www.roblox.com/games/115209351507608/The-Armory" target="_blank" rel="noopener">
+        <div class="contrib-thumb">
+          <img src="assets/games/the-armory.jpg" alt="The Armory" loading="lazy"/>
+          <span class="contrib-genre">Extraction PVP</span>
+          <span class="contrib-studio">Mournsippers</span>
+        </div>
+        <div class="contrib-body">
+          <div class="contrib-name">The Armory</div>
+          <div class="contrib-role">Scripter · Early Access</div>
+          <div class="contrib-stats">
+            <div class="contrib-stat"><div class="cs-val">21K<span>+</span></div><div class="cs-lbl">Likes</div></div>
+            <div class="contrib-stat"><div class="cs-val">PVP</div><div class="cs-lbl">Extraction</div></div>
+          </div>
+          <span class="contrib-link">Play on Roblox →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- ════════ VIDEOS ════════ -->
 <section id="videos" class="section">
   <div class="section-inner" style="padding-bottom:2rem">
     <div class="r">
       <div class="section-label">
-        <span class="section-num">04 / Showcase</span>
+        <span class="section-num">05 / Showcase</span>
         <span class="section-rule"></span>
       </div>
       <h2 class="section-title">My <span class="hl">Work</span></h2>
@@ -970,7 +1138,7 @@ footer {
   <div class="section-inner">
     <div class="r">
       <div class="section-label">
-        <span class="section-num">05 / Process</span>
+        <span class="section-num">06 / Process</span>
         <span class="section-rule"></span>
       </div>
       <h2 class="section-title">How I <span class="hl">Work</span></h2>
@@ -1010,7 +1178,7 @@ footer {
   <div class="section-inner">
     <div class="r">
       <div class="section-label">
-        <span class="section-num">06 / Contact</span>
+        <span class="section-num">07 / Contact</span>
         <span class="section-rule"></span>
       </div>
       <h2 class="section-title">Let's <span class="hl">Build</span></h2>
@@ -1075,7 +1243,7 @@ function bindHover(el) {
   el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
   el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
 }
-document.querySelectorAll('a, button, .vid-card, .c-card, .skill-row, .process-card, .stat-block, .exp-card').forEach(bindHover);
+document.querySelectorAll('a, button, .vid-card, .c-card, .skill-row, .process-card, .stat-block, .exp-card, .contrib-card').forEach(bindHover);
 
 /* ── MATRIX RAIN ── */
 (function() {
@@ -1127,12 +1295,12 @@ document.querySelectorAll('.skill-row').forEach(el => skillObs.observe(el));
 
 /* ── COUNTERS ── */
 function animCounter(el) {
-  const target = +el.dataset.target, dur = 2000; let start = null;
+  const target = +el.dataset.target, dec = +(el.dataset.dec || 0), dur = 2000; let start = null;
   function step(ts) {
     if (!start) start = ts;
     const p = Math.min((ts - start) / dur, 1), ease = 1 - Math.pow(1 - p, 4);
-    el.textContent = Math.floor(ease * target);
-    if (p < 1) requestAnimationFrame(step); else el.textContent = target;
+    el.textContent = dec ? (ease * target).toFixed(dec) : Math.floor(ease * target);
+    if (p < 1) requestAnimationFrame(step); else el.textContent = dec ? target.toFixed(dec) : target;
   }
   requestAnimationFrame(step);
 }
@@ -1262,6 +1430,169 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft')  { const i = findVideo(currentIdx, -1); if (i !== -1) loadVideo(currentIdx = i); }
   if (e.key === 'ArrowRight') { const i = findVideo(currentIdx, +1); if (i !== -1) loadVideo(currentIdx = i); }
 });
+
+/* ── HERO AVATAR ── */
+(function() {
+  const wrap = document.getElementById('hero-avatar');
+  const cv = document.getElementById('avatar-canvas');
+  const ctx = cv.getContext('2d');
+  const IW = 480, IH = 700, DEPTH = 84, AUTO = 0.85;
+  const CROWN_X = 240, CROWN_Y = 96, CROWN_SPREAD = 50;
+  const COLORS = ['#fff27a', '#a6ff4d', '#3dffc8', '#4cd6ff', '#ffffff', '#ff8ad8'];
+
+  const load = src => new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => res(img);
+    img.onerror = rej;
+    img.src = src;
+  });
+
+  const sprites = COLORS.map(col => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 48;
+    const g = c.getContext('2d');
+    g.shadowColor = col; g.shadowBlur = 14;
+    g.fillStyle = col; g.fillRect(16, 16, 16, 16);
+    g.shadowBlur = 0; g.globalAlpha = 0.6;
+    g.fillStyle = '#fff'; g.fillRect(20, 20, 8, 8);
+    return c;
+  });
+
+  let W = 0, H = 0, dpr = 1, k = 1, ox = 0, oy = 0;
+  let front, back, side;
+  let angle = 0.5, spin = AUTO, dragging = false, lastX = 0, lastT = 0, dragVel = 0;
+  let last = 0, spawnAcc = 0, running = false, visible = true;
+  const parts = [];
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    k = Math.min(H * 0.84 / IH, W * 0.95 / IW);
+    ox = W / 2;
+    oy = H - IH * k - H * 0.03;
+    parts.length = 0;
+  }
+
+  function spawn(top, c) {
+    const spread = CROWN_SPREAD * (0.6 + 0.4 * Math.abs(c));
+    parts.push({
+      x: ox + (Math.random() - 0.5) * 2 * spread * k,
+      y: top + (CROWN_Y + Math.random() * 22) * k,
+      vx: (Math.random() - 0.5) * 22 * k,
+      vy: -(38 + Math.random() * 48) * k,
+      age: 0,
+      life: 1.3 + Math.random() * 1.5,
+      size: (10 + Math.random() * 14) * k,
+      spr: sprites[Math.floor(Math.random() * sprites.length)],
+      wob: Math.random() * Math.PI * 2
+    });
+  }
+
+  function frame(t) {
+    if (!visible) { running = false; return; }
+    const dt = Math.min((t - (last || t)) / 1000, 0.05);
+    last = t;
+
+    if (!dragging) {
+      angle += spin * dt;
+      spin += (AUTO - spin) * Math.min(1, dt * 1.4);
+    }
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    const c = Math.cos(angle), s = Math.sin(angle);
+    const top = oy + Math.sin(t / 1000 * 1.7) * 4;
+    const groundY = oy + 690 * k;
+
+    const rx = (150 * Math.abs(c) + 70 * Math.abs(s) + 30) * k;
+    const sh = ctx.createRadialGradient(ox, groundY, 0, ox, groundY, rx);
+    sh.addColorStop(0, 'rgba(0,0,0,0.55)');
+    sh.addColorStop(0.6, 'rgba(0,255,136,0.06)');
+    sh.addColorStop(1, 'rgba(0,255,136,0)');
+    ctx.save();
+    ctx.translate(ox, groundY); ctx.scale(1, 0.18); ctx.translate(-ox, -groundY);
+    ctx.fillStyle = sh;
+    ctx.beginPath(); ctx.arc(ox, groundY, rx, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+
+    const D = DEPTH * k;
+    const n = Math.max(2, Math.ceil(D * Math.abs(s) / 1.2));
+    const facingFront = c >= 0;
+    const dir = facingFront ? 1 : -1;
+    for (let i = 0; i < n; i++) {
+      const z = dir * D * (i / n - 0.5);
+      ctx.setTransform(dpr * c * k, 0, 0, dpr * k, dpr * (ox + z * s), dpr * top);
+      ctx.drawImage(side, -IW / 2, 0);
+    }
+    const zFace = dir * D / 2;
+    ctx.setTransform(dpr * c * k, 0, 0, dpr * k, dpr * (ox + zFace * s), dpr * top);
+    ctx.drawImage(facingFront ? front : back, -IW / 2, 0);
+    ctx.globalAlpha = Math.min(1, (1 - Math.abs(c)) * 0.6 + (facingFront ? 0 : 0.15));
+    ctx.drawImage(side, -IW / 2, 0);
+    ctx.globalAlpha = 1;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    spawnAcc += dt * 26;
+    while (spawnAcc >= 1) { spawn(top, c); spawnAcc--; }
+
+    ctx.globalCompositeOperation = 'lighter';
+    const q = Math.max(2, 3 * k);
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.age += dt;
+      if (p.age >= p.life) { parts.splice(i, 1); continue; }
+      p.x += (p.vx + Math.sin(p.wob + p.age * 4) * 10 * k) * dt;
+      p.y += p.vy * dt;
+      const lf = p.age / p.life;
+      ctx.globalAlpha = Math.min(1, p.age / 0.15) * (lf > 0.5 ? 1 - (lf - 0.5) / 0.5 : 1);
+      const sz = p.size * (1 - 0.4 * lf) * 3;
+      const px = Math.round(p.x / q) * q, py = Math.round(p.y / q) * q;
+      ctx.drawImage(p.spr, px - sz / 2, py - sz / 2, sz, sz);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+
+    requestAnimationFrame(frame);
+  }
+
+  function start() {
+    if (running || !front) return;
+    running = true; last = 0;
+    requestAnimationFrame(frame);
+  }
+
+  cv.addEventListener('pointerdown', e => {
+    dragging = true; lastX = e.clientX; lastT = performance.now(); dragVel = 0;
+    cv.setPointerCapture(e.pointerId);
+  });
+  cv.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const now = performance.now(), dx = e.clientX - lastX;
+    angle += dx * 0.012;
+    dragVel = dx * 0.012 / Math.max((now - lastT) / 1000, 0.008);
+    lastX = e.clientX; lastT = now;
+  });
+  const release = () => {
+    if (!dragging) return;
+    dragging = false;
+    spin = performance.now() - lastT > 80 ? 0 : Math.max(-14, Math.min(14, dragVel));
+  };
+  cv.addEventListener('pointerup', release);
+  cv.addEventListener('pointercancel', release);
+  bindHover(cv);
+
+  new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting;
+    if (visible) start();
+  }).observe(wrap);
+  window.addEventListener('resize', resize);
+
+  Promise.all(['front', 'back', 'side'].map(n => load(`assets/avatar/${n}.png`)))
+    .then(([f, b, sd]) => { front = f; back = b; side = sd; resize(); start(); })
+    .catch(() => wrap.remove());
+})();
 
 /* ── MAGNETIC BUTTONS ── */
 document.querySelectorAll('.cta-primary, .nav-hire').forEach(btn => {
